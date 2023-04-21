@@ -1,9 +1,26 @@
 package com.example.finalProject.Modules;
 
-public class Cliente extends Usuario {
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-    public Cliente(String cedula, String nombre, String apellido, String correoElectronico, String celular, String direccionDeResidencia, String ciudadDeResidencia) {
-        super(cedula, nombre, apellido, correoElectronico, celular, direccionDeResidencia, ciudadDeResidencia);
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Setter @Getter
+@Table(name="paciente")
+public class Cliente extends Usuario implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Column(name = "contrasena")
+    private String contrasena;
+
+
+    public Cliente(Integer cedula, String nombre, String apellido, String correoElectronico,
+                   String celular, String direccionDeResidencia, String ciudadDeResidencia) {
+        super(cedula,nombre, apellido, correoElectronico, celular, direccionDeResidencia, ciudadDeResidencia);
     }
+    public Cliente(){}
 
 }

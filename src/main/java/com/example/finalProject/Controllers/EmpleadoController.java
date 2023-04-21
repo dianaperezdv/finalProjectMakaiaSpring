@@ -1,10 +1,8 @@
 package com.example.finalProject.Controllers;
 
 
-import com.example.finalProject.Modules.Cliente;
 import com.example.finalProject.Modules.Empleado;
-import com.example.finalProject.Service.EmpleadoService;
-import org.apache.coyote.Response;
+import com.example.finalProject.Services.EmpleadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +34,7 @@ public class EmpleadoController {
     }
 
     @GetMapping("/empleados/{cedula}")
-    public ResponseEntity<Empleado> obtenerEmpleadoPorCedula(@PathVariable String cedula){
+    public ResponseEntity<Empleado> obtenerEmpleadoPorCedula(@PathVariable Integer cedula){
         try {
             Empleado empleado1 = empleadoService.obtenerEmpleadoCedula(cedula);
             return ResponseEntity.ok(empleado1);
@@ -47,15 +45,14 @@ public class EmpleadoController {
     }
 
     @DeleteMapping("/empleados/{cedula}")
-    public String eliminar(@PathVariable("cedula") String cedula) {
+    public ResponseEntity eliminar(@PathVariable("cedula") Integer cedula) {
         return empleadoService.eliminar(cedula);
     }
 
-    @PutMapping ("/empleados/{cedula}")
-    public ResponseEntity actualizarEmpleado(@PathVariable("cedula") String cedula, @RequestBody Empleado empleado)
+    @PutMapping ("/empleados")
+    public ResponseEntity actualizarEmpleado(@RequestBody Empleado empleado)
     {       try {
-        Empleado empleado1 = empleadoService.actualizarEmpleado(empleado);
-        return ResponseEntity.ok(empleado1);
+        return empleadoService.actualizarEmpleado(empleado);
     }
     catch (Exception e){
         return new ResponseEntity("No se pudo actualizar", HttpStatus.BAD_REQUEST);

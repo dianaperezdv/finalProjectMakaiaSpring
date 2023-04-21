@@ -1,9 +1,7 @@
 package com.example.finalProject.Controllers;
 
-import com.example.finalProject.Modules.Empleado;
-import com.example.finalProject.Service.ClienteService;
 import com.example.finalProject.Modules.Cliente;
-import org.apache.coyote.Response;
+import com.example.finalProject.Services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +33,7 @@ public class ClienteController {
     }
 
     @GetMapping("/clientes/{cedula}")
-    public ResponseEntity<Cliente> getClientePorCedula(@PathVariable String cedula){
+    public ResponseEntity<Cliente> getClientePorCedula(@PathVariable Integer cedula){
         try {
             Cliente cliente1 = clienteService.obtenerClienteCedula(cedula);
             return ResponseEntity.ok(cliente1);
@@ -46,12 +44,12 @@ public class ClienteController {
     }
 
     @DeleteMapping("/clientes/{cedula}")
-    public String eliminar(@PathVariable("cedula") String cedula) {
+    public ResponseEntity eliminar(@PathVariable("cedula") Integer cedula) {
         return clienteService.eliminar(cedula);
     }
 
-    @PutMapping ("/clientes/{cedula}")
-    public ResponseEntity actualizarCliente(@PathVariable("cedula") String cedula, @RequestBody Cliente cliente)
+    @PutMapping ("/clientes")
+    public ResponseEntity actualizarCliente(@RequestBody Cliente cliente)
     {       try {
                  return clienteService.actualizarCliente(cliente);
              }

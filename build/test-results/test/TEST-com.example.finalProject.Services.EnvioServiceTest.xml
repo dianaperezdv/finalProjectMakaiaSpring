@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.finalProject.Services.EnvioServiceTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2023-04-21T01:09:47" hostname="DIANIS" time="0.006">
+<testsuite name="com.example.finalProject.Services.EnvioServiceTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2023-04-21T05:17:26" hostname="DIANIS" time="0.006">
   <properties/>
-  <testcase name="calcularValor()" classname="com.example.finalProject.Services.EnvioServiceTest" time="0.001"/>
+  <testcase name="calcularValor()" classname="com.example.finalProject.Services.EnvioServiceTest" time="0.002"/>
   <testcase name="obtenerEnvios()" classname="com.example.finalProject.Services.EnvioServiceTest" time="0.001"/>
   <testcase name="crearEnvio()" classname="com.example.finalProject.Services.EnvioServiceTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>

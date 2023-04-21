@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.finalProject.Services.ClienteServiceTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2023-04-21T07:23:15" hostname="DIANIS" time="0.322">
+<testsuite name="com.example.finalProject.Services.ClienteServiceTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2023-04-21T08:18:20" hostname="DIANIS" time="0.253">
   <properties/>
-  <testcase name="eliminarClienteExiste()" classname="com.example.finalProject.Services.ClienteServiceTest" time="0.285"/>
+  <testcase name="eliminarClienteExiste()" classname="com.example.finalProject.Services.ClienteServiceTest" time="0.228"/>
   <testcase name="crearCliente()" classname="com.example.finalProject.Services.ClienteServiceTest" time="0.001"/>
-  <testcase name="ActualizarCliente()" classname="com.example.finalProject.Services.ClienteServiceTest" time="0.018"/>
+  <testcase name="ActualizarCliente()" classname="com.example.finalProject.Services.ClienteServiceTest" time="0.011"/>
   <testcase name="verificarClienteExiste()" classname="com.example.finalProject.Services.ClienteServiceTest" time="0.004"/>
   <testcase name="actualizarClienteNoExistente()" classname="com.example.finalProject.Services.ClienteServiceTest" time="0.002"/>
-  <testcase name="obtenerClientes()" classname="com.example.finalProject.Services.ClienteServiceTest" time="0.003"/>
+  <testcase name="obtenerClientes()" classname="com.example.finalProject.Services.ClienteServiceTest" time="0.002"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

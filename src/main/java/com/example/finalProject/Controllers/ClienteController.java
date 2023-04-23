@@ -34,13 +34,7 @@ public class ClienteController {
 
     @GetMapping("/clientes/{cedula}")
     public ResponseEntity<Cliente> getClientePorCedula(@PathVariable Integer cedula){
-        try {
-            Cliente cliente1 = clienteService.obtenerClienteCedula(cedula);
-            return ResponseEntity.ok(cliente1);
-        }
-        catch (Exception e){
-            return new ResponseEntity("No existe un cliente con esa cédula", HttpStatus.BAD_REQUEST);
-        }
+            return clienteService.obtenerClienteCedula(cedula);
     }
 
     @DeleteMapping("/clientes/{cedula}")

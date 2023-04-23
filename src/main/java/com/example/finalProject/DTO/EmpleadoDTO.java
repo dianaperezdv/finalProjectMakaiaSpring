@@ -1,5 +1,5 @@
 package com.example.finalProject.DTO;
-import com.example.finalProject.Modules.TipoEmpleado;
+import com.example.finalProject.Modules.Enums.TipoEmpleado;
 import java.time.LocalDate;
 
 public class EmpleadoDTO {
@@ -9,8 +9,8 @@ public class EmpleadoDTO {
     private String apellido;
     private String correoElectronico;
     private String celular;
-    private String direccionDeResidencia;
-    private String ciudadDeResidencia;
+    private String direccionResidencia;
+    private String ciudadResidencia;
     private String tipoDeSangreRH;
     private LocalDate antiguedadEmpleado;
     private TipoEmpleado tipoDeEmpleado;

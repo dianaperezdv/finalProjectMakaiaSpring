@@ -48,15 +48,20 @@ public class ClienteService {
         return this.clienteRepository.findAll();
     }
 
-    public Cliente obtenerClienteCedula(Integer cedula) {
-        return (this.clienteRepository.findById(cedula)).get();
+    public ResponseEntity obtenerClienteCedula(Integer cedula) {
+        try{
+            return ResponseEntity.ok(this.clienteRepository.findById(cedula));
+        }
+        catch (Exception e){
+            return new ResponseEntity("No existe un cliente con esta cédula", HttpStatus.BAD_REQUEST);
+        }
     }
 
 
     public ResponseEntity actualizarCliente (Cliente cliente) {
         if(verificarClienteExiste(cliente.getCedula())){
             this.clienteRepository.save(cliente);
-            return new ResponseEntity(obtenerClienteCedula(cliente.getCedula()), HttpStatus.ACCEPTED);
+            return ResponseEntity.ok(obtenerClienteCedula(cliente.getCedula()));
         }
         else {
             return new ResponseEntity("No existe un cliente con esta cédula", HttpStatus.BAD_REQUEST);
@@ -72,9 +77,8 @@ public class ClienteService {
 
         }
         catch (Exception e){
-            throw new InvalidStatementException("No se ha podido eliminar el cliente");
-        }
-
+            return new ResponseEntity("No existe un cliente con esta cédula", HttpStatus.BAD_REQUEST);
+            }
     }
 
 }

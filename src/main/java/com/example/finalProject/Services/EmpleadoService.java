@@ -44,14 +44,24 @@ public class EmpleadoService {
         }
     }
     }
-    public Empleado obtenerEmpleadoCedula(Integer cedula) {
-        return (this.empleadoRepository.findById(cedula)).get();
+    public ResponseEntity obtenerEmpleadoCedula(Integer cedula) {
+        try{
+            return new ResponseEntity(this.empleadoRepository.findById(cedula), HttpStatus.ACCEPTED);
+        }
+        catch (Exception e){
+            return new ResponseEntity("No existe un empleado con esta cédula", HttpStatus.BAD_REQUEST);
+        }
     }
 
-    public ResponseEntity actualizarEmpleado (Empleado empleado) throws IllegalAccessException {
+    public ResponseEntity actualizarEmpleado (Empleado empleado) {
         if(verificarEmpleadoExiste(empleado.getCedula())){
-            this.empleadoRepository.save(empleado);
-            return new ResponseEntity(obtenerEmpleadoCedula(empleado.getCedula()), HttpStatus.ACCEPTED);
+            try{
+                this.empleadoRepository.save(empleado);
+                return new ResponseEntity(obtenerEmpleadoCedula(empleado.getCedula()), HttpStatus.ACCEPTED);
+            }
+            catch (Exception e){
+                return new ResponseEntity("No se ha podido actualizar el empleado", HttpStatus.BAD_REQUEST);
+            }
         }
         else {
             return new ResponseEntity("No existe un empleado con esta cedula", HttpStatus.BAD_REQUEST);
@@ -65,7 +75,7 @@ public class EmpleadoService {
 
         }
         catch (Exception e){
-            throw new InvalidStatementException("No se ha podido eliminar el empleado");
+            return new ResponseEntity("No se ha podido eliminar el empleado", HttpStatus.BAD_REQUEST);
         }
 
     }

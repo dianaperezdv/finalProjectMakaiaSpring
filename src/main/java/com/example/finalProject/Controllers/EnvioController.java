@@ -1,5 +1,6 @@
 package com.example.finalProject.Controllers;
-import com.example.finalProject.DTO.EnvioDTO;
+import com.example.finalProject.DTO.EnvioCreadoDTO;
+import com.example.finalProject.DTO.EnvioNuevoDTO;
 import com.example.finalProject.Services.EnvioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class EnvioController {
     }
 
     @PostMapping("/envios")
-    public EnvioDTO crearEnvio(@RequestBody EnvioDTO envio) {
+    public EnvioCreadoDTO crearEnvio(@RequestBody EnvioNuevoDTO envio) {
         return envioService.crearEnvio(envio);
 
     }

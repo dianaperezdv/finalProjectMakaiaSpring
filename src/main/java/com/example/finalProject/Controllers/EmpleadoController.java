@@ -35,13 +35,7 @@ public class EmpleadoController {
 
     @GetMapping("/empleados/{cedula}")
     public ResponseEntity<Empleado> obtenerEmpleadoPorCedula(@PathVariable Integer cedula){
-        try {
-            Empleado empleado1 = empleadoService.obtenerEmpleadoCedula(cedula);
-            return ResponseEntity.ok(empleado1);
-        }
-        catch (Exception e){
-            return new ResponseEntity("No existe un empleado con esa cedula", HttpStatus.BAD_REQUEST);
-        }
+        return empleadoService.obtenerEmpleadoCedula(cedula);
     }
 
     @DeleteMapping("/empleados/{cedula}")
@@ -50,15 +44,8 @@ public class EmpleadoController {
     }
 
     @PutMapping ("/empleados")
-    public ResponseEntity actualizarEmpleado(@RequestBody Empleado empleado)
-    {       try {
+    public ResponseEntity actualizarEmpleado(@RequestBody Empleado empleado) {
         return empleadoService.actualizarEmpleado(empleado);
     }
-    catch (Exception e){
-        return new ResponseEntity("No se pudo actualizar", HttpStatus.BAD_REQUEST);
-    }
-    }
-
-
 
 }

@@ -1,12 +1,11 @@
 package com.example.finalProject.Modules;
-import lombok.Data;
+import com.example.finalProject.Modules.Enums.TipoEmpleado;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Entity
 @Setter
@@ -29,9 +28,9 @@ public class Empleado extends Usuario implements Serializable {
 
     @Autowired
     public Empleado(Integer cedula, String nombre, String apellido, String correoElectronico, String celular,
-                    String direccionDeResidencia, String ciudadDeResidencia, String tipoDeSangreRH,
+                    String direccionResidencia, String ciudadResidencia, String tipoDeSangreRH,
                     Integer antiguedadEmpleado, TipoEmpleado tipoDeEmpleado, String contrasena) {
-        super(cedula, nombre, apellido, correoElectronico, celular, direccionDeResidencia, ciudadDeResidencia);
+        super(cedula, nombre, apellido, correoElectronico, celular, direccionResidencia, ciudadResidencia);
         this.tipoDeSangreRH = tipoDeSangreRH;
         this.antiguedadEmpleado = antiguedadEmpleado;
         this.tipoDeEmpleado = tipoDeEmpleado;

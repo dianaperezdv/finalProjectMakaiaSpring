@@ -23,19 +23,19 @@ public class Usuario {
     private String correoElectronico;
     @Column(name = "celular")
     private String celular;
-    @Column(name = "direccionDeResidencia")
-    private String direccionDeResidencia;
-    @Column(name = "ciudadDeResidencia")
-    private String ciudadDeResidencia;
+    @Column(name = "direccionResidencia")
+    private String direccionResidencia;
+    @Column(name = "ciudadResidencia")
+    private String ciudadResidencia;
 
-    public Usuario(Integer cedula, String nombre, String apellido, String correoElectronico, String celular, String direccionDeResidencia, String ciudadDeResidencia) {
+    public Usuario(Integer cedula, String nombre, String apellido, String correoElectronico, String celular, String direccionResidencia, String ciudadResidencia) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correoElectronico = correoElectronico;
         this.celular = celular;
-        this.direccionDeResidencia = direccionDeResidencia;
-        this.ciudadDeResidencia = ciudadDeResidencia;
+        this.direccionResidencia = direccionResidencia;
+        this.ciudadResidencia = ciudadResidencia;
     }
 
     public Usuario(){}

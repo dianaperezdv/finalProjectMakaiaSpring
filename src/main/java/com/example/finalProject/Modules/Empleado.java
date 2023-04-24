@@ -1,4 +1,5 @@
 package com.example.finalProject.Modules;
+
 import com.example.finalProject.Modules.Enums.TipoEmpleado;
 import lombok.Getter;
 import lombok.Setter;

@@ -3,7 +3,7 @@ package com.example.finalProject.Services;
 import com.example.finalProject.DTO.EnvioCreadoDTO;
 import com.example.finalProject.DTO.EnvioNuevoDTO;
 import com.example.finalProject.DTO.EstadoEnvioDTO;
-import com.example.finalProject.Exception.InvalidStatementException;
+import com.example.finalProject.Exception.ApiRequestException;
 import com.example.finalProject.Modules.Cliente;
 import com.example.finalProject.Modules.Empleado;
 import com.example.finalProject.Modules.Enums.EstadoEnvio;
@@ -94,7 +94,7 @@ class EnvioServiceTest {
     }
 
     @Test
-    void crearEnvioDatosIncorrectos() throws InvalidStatementException {
+    void crearEnvioDatosIncorrectos() throws ApiRequestException {
         //Arrange
         EnvioNuevoDTO envioDto = new EnvioNuevoDTO();
         envioDto.setCedula(123456789);
@@ -110,7 +110,7 @@ class EnvioServiceTest {
         Paquete paquete1 = new Paquete(2,2000);
         Envio envio1 = new Envio(cliente,"Medellín","Bogotá","Cra 17 #20-10","Laura","342352", LocalTime.now(), EstadoEnvio.RECIBIDO,10000,paquete1);
         // Act
-        InvalidStatementException exception =   Assertions.assertThrows(InvalidStatementException.class, () -> {
+        ApiRequestException exception =   Assertions.assertThrows(ApiRequestException.class, () -> {
             this.envioService.crearEnvio(envioDto);
         });
         //Assert
@@ -118,7 +118,7 @@ class EnvioServiceTest {
     }
 
     @Test
-    void crearEnvioClienteNoExiste() throws InvalidStatementException {
+    void crearEnvioClienteNoExiste() throws ApiRequestException {
         //Arrange
         EnvioNuevoDTO envioDto = new EnvioNuevoDTO();
         envioDto.setCedula(123456789);
@@ -131,7 +131,7 @@ class EnvioServiceTest {
         envioDto.setPeso(2);
         when(this.clienteRepository.findById(123456789)).thenReturn(Optional.empty());
         //Act
-        InvalidStatementException exception = Assertions.assertThrows(InvalidStatementException.class, () -> {
+        ApiRequestException exception = Assertions.assertThrows(ApiRequestException.class, () -> {
             this.envioService.crearEnvio(envioDto);
         });
         //Assert
@@ -139,11 +139,11 @@ class EnvioServiceTest {
     }
 
     @Test
-    void obtenerEnvioNoExiste() throws InvalidStatementException {
+    void obtenerEnvioNoExiste() throws ApiRequestException {
         //Arrange
         when(this.envioRepository.findById("1")).thenReturn(Optional.empty());
         //Act
-        InvalidStatementException exception = Assertions.assertThrows(InvalidStatementException.class, () -> {
+        ApiRequestException exception = Assertions.assertThrows(ApiRequestException.class, () -> {
             this.envioService.obtenerEnvio("1");
         });
         //Assert
@@ -165,17 +165,17 @@ class EnvioServiceTest {
     }
 
     @Test
-    void obtenerEnvioPorCedulaInexistente()throws InvalidStatementException{
+    void obtenerEnvioPorCedulaInexistente()throws ApiRequestException {
         //Arrange
         when(clienteRepository.findById(1234567890)).thenReturn(Optional.empty());
         //Act
-        InvalidStatementException  exception = assertThrows(InvalidStatementException.class, () -> this.envioService.obtenerEnviosPorCedula(1234567890));
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> this.envioService.obtenerEnviosPorCedula(1234567890));
         //Assert
         assertEquals("No existe un cliente con cedula 1234567890 en nuestra compañía", exception.getMessage());
     }
 
     @Test
-    void obtenerEnviosPorCedulaClienteSinEnvios() throws InvalidStatementException{
+    void obtenerEnviosPorCedulaClienteSinEnvios() throws ApiRequestException {
         //Arrange
         Integer cedula = 1234567890;
         Cliente cliente = new Cliente();
@@ -183,7 +183,7 @@ class EnvioServiceTest {
         when(clienteRepository.findById(cedula)).thenReturn(Optional.of(cliente));
         when(envioRepository.findAllByClienteCedula(cedula)).thenReturn(new ArrayList<>());
         //Act
-        InvalidStatementException exception = assertThrows(InvalidStatementException.class, () -> this.envioService.obtenerEnviosPorCedula(cedula));
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> this.envioService.obtenerEnviosPorCedula(cedula));
         //Assert
         assertEquals("El cliente con 1234567890 no tiene envíos registrados en el sistema", exception.getMessage());
 
@@ -231,17 +231,17 @@ class EnvioServiceTest {
     }
 
     @Test
-    void obtenerEnviosPorEstadoEnvioEmpleadoNoExiste() throws InvalidStatementException{
+    void obtenerEnviosPorEstadoEnvioEmpleadoNoExiste() throws ApiRequestException {
         //Arrange
         when(this.empleadoRepository.findById(1876543219)).thenReturn(Optional.empty());
         //Act
-        InvalidStatementException exception = assertThrows(InvalidStatementException.class, () -> this.envioService.obtenerEnviosPorEstado("ENTREGADO", 1876543219));
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> this.envioService.obtenerEnviosPorEstado("ENTREGADO", 1876543219));
         //Assert
         assertEquals("No existe un empleado con cedula 1876543219 en nuestra compañía", exception.getMessage());
     }
 
     @Test
-    void obtenerEnviosPorEstadoClienteNoTieneEnvios() throws InvalidStatementException{
+    void obtenerEnviosPorEstadoClienteNoTieneEnvios() throws ApiRequestException {
         //Arrange
         Cliente cliente1 = new Cliente();
         cliente1.setCedula(1234567890);
@@ -252,13 +252,13 @@ class EnvioServiceTest {
         when(this.empleadoRepository.findById(1876543219)).thenReturn(Optional.of(empleado1));
         when(this.envioRepository.findAllByEstadoEnvio(EstadoEnvio.ENTREGADO)).thenReturn(new ArrayList<>());
         //Act
-        InvalidStatementException exception = assertThrows(InvalidStatementException.class, () -> this.envioService.obtenerEnviosPorEstado("ENTREGADO", 1876543219));
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> this.envioService.obtenerEnviosPorEstado("ENTREGADO", 1876543219));
         //Assert
         assertEquals("No existen envíos en estado ENTREGADO en el sistema", exception.getMessage());
     }
 
     @Test
-    void eliminarEnvioInexistente() throws InvalidStatementException{
+    void eliminarEnvioInexistente() throws ApiRequestException {
         //Arrange
         when(this.envioRepository.findById("1")).thenReturn(Optional.empty());
         //Act
@@ -283,30 +283,30 @@ class EnvioServiceTest {
     }
 
     @Test
-    void actualizarEstadoEmpleadoInexistente () throws InvalidStatementException{
+    void actualizarEstadoEmpleadoInexistente () throws ApiRequestException {
         //Arrange
         when(this.empleadoRepository.findById(1876543219)).thenReturn(Optional.empty());
         //Act
-        InvalidStatementException exception = assertThrows(InvalidStatementException.class, () -> this.envioService.actualizarEstado("1", "ENTREGADO", 1876543219));
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> this.envioService.actualizarEstado("1", "ENTREGADO", 1876543219));
         //Assert
         assertEquals("El empleado con cedula 1876543219 no existe en nuestra compañía", exception.getMessage());
     }
 
     @Test
-    void actualizarEstadoEnvioInexistente () throws InvalidStatementException{
+    void actualizarEstadoEnvioInexistente () throws ApiRequestException {
         //Arrange
         Empleado empleado1 = new Empleado();
         empleado1.setCedula(1876543219);
         when(this.empleadoRepository.findById(1876543219)).thenReturn(Optional.of(empleado1));
         when(this.envioRepository.findById("1")).thenReturn(Optional.empty());
         //Act
-        InvalidStatementException exception = assertThrows(InvalidStatementException.class, () -> this.envioService.actualizarEstado("1", "ENTREGADO", 1876543219));
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> this.envioService.actualizarEstado("1", "ENTREGADO", 1876543219));
         //Assert
         assertEquals("No existe un envío con número de guía 1 en el sistema", exception.getMessage());
     }
 
     @Test
-    void actualizarEstadoEnvioIncumpleValidaciones() throws InvalidStatementException{
+    void actualizarEstadoEnvioIncumpleValidaciones() throws ApiRequestException {
         //Arrange
         Empleado empleado1 = new Empleado();
         empleado1.setCedula(1876543219);
@@ -317,13 +317,13 @@ class EnvioServiceTest {
         Envio envio1 = new Envio(cliente1,"Medellín","Bogotá","Cra 17 #20-10","Laura","342352", LocalTime.now(), EstadoEnvio.RECIBIDO,10000,paquete1);
         when(this.envioRepository.findById("1")).thenReturn(Optional.of(envio1));
         //Act
-        InvalidStatementException exception = assertThrows(InvalidStatementException.class, () -> this.envioService.actualizarEstado("1", "Entregado", 1876543219));
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> this.envioService.actualizarEstado("1", "Entregado", 1876543219));
         //Assert
         assertEquals("El cambio de estado no cumple con las validaciones", exception.getMessage());
     }
 
     @Test
-    void actualizarEstadoEnvioEntregado() throws InvalidStatementException{
+    void actualizarEstadoEnvioEntregado() throws ApiRequestException {
         //Arrange
         Empleado empleado1 = new Empleado();
         empleado1.setCedula(1876543219);
@@ -334,7 +334,7 @@ class EnvioServiceTest {
         Envio envio1 = new Envio(cliente1,"Medellín","Bogotá","Cra 17 #20-10","Laura","342352", LocalTime.now(), EstadoEnvio.ENTREGADO,10000,paquete1);
         when(this.envioRepository.findById("1")).thenReturn(Optional.of(envio1));
         //Act
-        InvalidStatementException exception = assertThrows(InvalidStatementException.class, () -> this.envioService.actualizarEstado("1", "Entregado", 1876543219));
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> this.envioService.actualizarEstado("1", "Entregado", 1876543219));
         //Assert
         assertEquals("El envío con número de guía 1 ya fue entregado", exception.getMessage());
     }

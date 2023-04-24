@@ -1,6 +1,5 @@
 package com.example.finalProject.DTO;
 
-import com.example.finalProject.Modules.Enums.EstadoEnvio;
 import lombok.Getter;
 import lombok.Setter;
 

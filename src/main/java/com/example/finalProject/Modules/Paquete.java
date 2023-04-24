@@ -1,10 +1,9 @@
 package com.example.finalProject.Modules;
 
-import com.example.finalProject.Exception.InvalidStatementException;
+import com.example.finalProject.Exception.ApiRequestException;
 import com.example.finalProject.Modules.Enums.TipoPaquete;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,7 +18,7 @@ public class Paquete implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Column (name = "idPaquete")
-    private String idPaquete;
+    private Integer idPaquete;
     @Column (name = "tipoDePaquete")
     @Enumerated(value = EnumType.STRING)
     private TipoPaquete tipoDePaquete;
@@ -29,12 +28,11 @@ public class Paquete implements Serializable {
     private double valorDeclarado;
 
     public Paquete(float peso, double valorDeclarado){
-        Random random = new Random();
-        this.idPaquete = RandomStringUtils.randomAlphanumeric(10);
-        try {
+        this.idPaquete = new Random().nextInt();
+        if (peso<0){
+            throw new ApiRequestException("El peso no es válido, ingrese un número mayor a 0");}
+        else{
             this.tipoDePaquete = calcularTipo(peso);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
         this.peso = peso;
         this.valorDeclarado = valorDeclarado;
@@ -45,11 +43,8 @@ public class Paquete implements Serializable {
         return tipoDePaquete;
     }
 
-    public TipoPaquete calcularTipo(float peso) throws Exception {
-        if (peso<0){
-            throw new InvalidStatementException("El peso no es válido, ingrese un número mayor a 0");}
-        else{
-            try {
+    public TipoPaquete calcularTipo(float peso) {
+
                 if(peso<=2.0){
                     return TipoPaquete.LIVIANO;
                 }
@@ -59,10 +54,7 @@ public class Paquete implements Serializable {
                 else{
                     return TipoPaquete.GRANDE;
                 }
-            }
-            catch (Exception e){
-                throw new InvalidStatementException("El peso no es válido", e);
-            }
+
         }
     }
-}
+

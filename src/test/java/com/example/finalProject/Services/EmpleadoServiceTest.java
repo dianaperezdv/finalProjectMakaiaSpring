@@ -1,9 +1,8 @@
 package com.example.finalProject.Services;
 
-import com.example.finalProject.Exception.InvalidStatementException;
+import com.example.finalProject.Exception.ApiRequestException;
 import com.example.finalProject.Modules.Empleado;
 import com.example.finalProject.Repositories.EmpleadoRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -44,13 +43,13 @@ class EmpleadoServiceTest {
 
 
     @Test
-    void crearEmpleadoCedulaExistente() throws InvalidStatementException {
+    void crearEmpleadoCedulaExistente() throws ApiRequestException {
         //Arrange
         Empleado empleado1 = new Empleado();
         empleado1.setCedula(1234);
         when(empleadoRepository.findById(1234)).thenReturn(Optional.of(empleado1));
         //Act
-        InvalidStatementException exception = assertThrows(InvalidStatementException.class, () -> {
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
             empleadoService.crearEmpleado(empleado1);
         });
         //Assert
@@ -59,27 +58,27 @@ class EmpleadoServiceTest {
     }
 
     @Test
-    void crearEmpleadoCorreoIncorrecto() throws InvalidStatementException{
+    void crearEmpleadoCorreoIncorrecto() throws ApiRequestException {
         //Arrange
         Empleado empleado1 = new Empleado();
         empleado1.setCedula(1234567890);
         empleado1.setCorreoElectronico("correoIncorrecto");
         when(empleadoRepository.findById(1234567890)).thenReturn(Optional.empty());
         //Act
-        InvalidStatementException exception = assertThrows(InvalidStatementException.class, () -> {
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
             empleadoService.crearEmpleado(empleado1);
         });
         //Assert
         assertEquals("El correo electrónico no es válido", exception.getMessage());
     }
     @Test
-    void crearEmpleadoCedulaIncorrecta() throws InvalidStatementException {
+    void crearEmpleadoCedulaIncorrecta() throws ApiRequestException {
         //Arrange
         Empleado empleado1 = new Empleado();
         empleado1.setCedula(1234);
         when(empleadoRepository.findById(1234)).thenReturn(Optional.empty());
         //Act
-        InvalidStatementException exception = assertThrows(InvalidStatementException.class, () -> {
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
             empleadoService.crearEmpleado(empleado1);
         });
         //Assert
@@ -130,12 +129,12 @@ class EmpleadoServiceTest {
     }
 
     @Test
-    void obtenerEmpleadoCedulaInexistente() throws InvalidStatementException {
+    void obtenerEmpleadoCedulaInexistente() throws ApiRequestException {
         //Arrange
         Integer cedula = 1234;
         when(empleadoRepository.findById(cedula)).thenReturn(Optional.empty());
         //Act
-        InvalidStatementException exception = assertThrows(InvalidStatementException.class, () -> {
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
             empleadoService.obtenerEmpleadoCedula(cedula);
         });
         //Assert
@@ -160,14 +159,14 @@ class EmpleadoServiceTest {
     }
 
     @Test
-    void actualizarEmpleadoInexistente() throws InvalidStatementException{
+    void actualizarEmpleadoInexistente() throws ApiRequestException {
         //Arrange
         Integer cedula = 1234;
         Empleado empleado = new Empleado();
         empleado.setCedula(cedula);
         when(this.empleadoRepository.findById(cedula)).thenReturn(Optional.empty());
         //Act
-        InvalidStatementException exception = assertThrows(InvalidStatementException.class, () -> {
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
             empleadoService.actualizarEmpleado(empleado);
         });
         //Assert

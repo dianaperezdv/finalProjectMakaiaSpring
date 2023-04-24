@@ -1,9 +1,8 @@
 package com.example.finalProject.Services;
 
-import com.example.finalProject.Exception.InvalidStatementException;
+import com.example.finalProject.Exception.ApiRequestException;
 import com.example.finalProject.Modules.Cliente;
 import com.example.finalProject.Repositories.ClienteRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -44,13 +43,13 @@ class ClienteServiceTest {
 
 
     @Test
-    void crearClienteCedulaExistente() throws InvalidStatementException {
+    void crearClienteCedulaExistente() throws ApiRequestException {
         //Arrange
         Cliente cliente1 = new Cliente();
         cliente1.setCedula(1234);
         when(clienteRepository.findById(1234)).thenReturn(Optional.of(cliente1));
         //Act
-        InvalidStatementException exception = assertThrows(InvalidStatementException.class, () -> {
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
             clienteService.crearCliente(cliente1);
         });
         //Assert
@@ -58,27 +57,27 @@ class ClienteServiceTest {
     }
 
     @Test
-    void crearClienteCorreoIncorrecto() throws InvalidStatementException{
+    void crearClienteCorreoIncorrecto() throws ApiRequestException {
         //Arrange
         Cliente cliente1 = new Cliente();
         cliente1.setCedula(1234567890);
         cliente1.setCorreoElectronico("correoIncorrecto");
         when(clienteRepository.findById(1234567890)).thenReturn(Optional.empty());
         //Act
-        InvalidStatementException exception = assertThrows(InvalidStatementException.class, () -> {
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
             clienteService.crearCliente(cliente1);
         });
         //Assert
         assertEquals("El correo electrónico no es válido", exception.getMessage());
     }
     @Test
-    void crearClienteCedulaIncorrecta() throws InvalidStatementException {
+    void crearClienteCedulaIncorrecta() throws ApiRequestException {
         //Arrange
         Cliente cliente1 = new Cliente();
         cliente1.setCedula(1234);
         when(clienteRepository.findById(1234)).thenReturn(Optional.empty());
         //Act
-        InvalidStatementException exception = assertThrows(InvalidStatementException.class, () -> {
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
             clienteService.crearCliente(cliente1);
         });
         //Assert
@@ -129,12 +128,12 @@ class ClienteServiceTest {
     }
 
     @Test
-    void obtenerClienteCedulaInexistente() throws InvalidStatementException {
+    void obtenerClienteCedulaInexistente() throws ApiRequestException {
         //Arrange
         Integer cedula = 1234;
         when(clienteRepository.findById(cedula)).thenReturn(Optional.empty());
         //Act
-        InvalidStatementException exception = assertThrows(InvalidStatementException.class, () -> {
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
             clienteService.obtenerClienteCedula(cedula);
         });
         //Assert
@@ -160,14 +159,14 @@ class ClienteServiceTest {
     }
 
     @Test
-    void actualizarClienteInexistente() throws InvalidStatementException{
+    void actualizarClienteInexistente() throws ApiRequestException {
         //Arrange
         Integer cedula = 1234;
         Cliente cliente = new Cliente();
         cliente.setCedula(cedula);
         when(this.clienteRepository.findById(cedula)).thenReturn(Optional.empty());
         //Act
-        InvalidStatementException exception = assertThrows(InvalidStatementException.class, () -> {
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
             clienteService.actualizarCliente(cliente);
         });
         //Assert

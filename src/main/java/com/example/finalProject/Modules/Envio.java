@@ -2,10 +2,10 @@ package com.example.finalProject.Modules;
 
 import com.example.finalProject.Modules.Enums.EstadoEnvio;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.RandomStringUtils;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalTime;
@@ -44,7 +44,7 @@ public class Envio implements Serializable {
     private double valorEnvio;
     @OneToOne(fetch=FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @JoinColumn(name="Paquete")
+    @JoinColumn(name="Paquete",foreignKey = @ForeignKey(name = "fk_paquete"),referencedColumnName = "idPaquete")
     private Paquete paquete;
 
     public Envio(Cliente cliente, String ciudadOrigen, String ciudadDestino, String direccionDestino, String nombreRecibe, String celularRecibe, LocalTime horaEntrega, EstadoEnvio estadoEnvio, double valorEnvio, Paquete paquete) {

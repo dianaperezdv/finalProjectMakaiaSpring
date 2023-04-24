@@ -1,12 +1,13 @@
 package com.example.finalProject.Services;
 
-import com.example.finalProject.Exception.InvalidStatementException;
+import com.example.finalProject.Exception.ApiRequestException;
 import com.example.finalProject.Modules.Empleado;
 import com.example.finalProject.Repositories.EmpleadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -32,7 +33,7 @@ public class EmpleadoService {
     }
     public Empleado crearEmpleado(Empleado empleado) {
         if (verificarEmpleadoExiste(empleado.getCedula())){
-            throw new InvalidStatementException("Ya existe un empleado con la cédula "  + empleado.getCedula() + " en el sistema");
+            throw new ApiRequestException("Ya existe un empleado con la cédula "  + empleado.getCedula() + " en el sistema");
         }
         else{
             if((empleado.getCedula().toString()).length() == 10){
@@ -40,11 +41,11 @@ public class EmpleadoService {
                     return this.empleadoRepository.save(empleado);
                 }
                 else{
-                    throw new InvalidStatementException("El correo electrónico no es válido");
+                    throw new ApiRequestException("El correo electrónico no es válido");
                 }
             }
             else{
-                throw new InvalidStatementException("La cédula debe tener 10 dígitos");
+                throw new ApiRequestException("La cédula debe tener 10 dígitos");
             }
         }
     }
@@ -53,7 +54,7 @@ public class EmpleadoService {
             return (this.empleadoRepository.findById(cedula)).get();
         }
         else{
-            throw new InvalidStatementException("No existe un empleado con la cédula número " + cedula);
+            throw new ApiRequestException("No existe un empleado con la cédula número " + cedula);
         }
     }
 
@@ -62,13 +63,13 @@ public class EmpleadoService {
             return this.empleadoRepository.save(empleado);
         }
         else {
-            throw new InvalidStatementException("No existe un empleado con la cédula "  + empleado.getCedula() + " en el sistema");
+            throw new ApiRequestException("No existe un empleado con la cédula "  + empleado.getCedula() + " en el sistema");
         }
     }
 
     public ResponseEntity eliminar(Integer cedula) {
         if (!verificarEmpleadoExiste(cedula)){
-            throw new InvalidStatementException("No existe un empleado con la cédula "  + cedula + " en el sistema" );
+            throw new ApiRequestException("No existe un empleado con la cédula "  + cedula + " en el sistema" );
         }
         else{
             this.empleadoRepository.deleteById(cedula);

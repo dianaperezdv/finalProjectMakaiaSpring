@@ -1,12 +1,13 @@
 package com.example.finalProject.Services;
 
-import com.example.finalProject.Exception.InvalidStatementException;
+import com.example.finalProject.Exception.ApiRequestException;
 import com.example.finalProject.Modules.Cliente;
 import com.example.finalProject.Repositories.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -30,7 +31,7 @@ public class ClienteService {
 
     public Cliente crearCliente(Cliente cliente) {
         if (verificarClienteExiste(cliente.getCedula())){
-            throw new InvalidStatementException("Ya existe un cliente con la cédula "+cliente.getCedula() + " en el sistema");
+            throw new ApiRequestException("Ya existe un cliente con la cédula "+cliente.getCedula() + " en el sistema");
         }
         else{
             if((cliente.getCedula().toString()).length() == 10){
@@ -38,11 +39,11 @@ public class ClienteService {
                     return this.clienteRepository.save(cliente);
                 }
                 else{
-                    throw new InvalidStatementException("El correo electrónico no es válido");
+                    throw new ApiRequestException("El correo electrónico no es válido");
                 }
             }
             else{
-                throw new InvalidStatementException("La cédula debe tener 10 dígitos");
+                throw new ApiRequestException("La cédula debe tener 10 dígitos");
             }
         }
     }
@@ -56,7 +57,7 @@ public class ClienteService {
             return this.clienteRepository.findById(cedula).get();
         }
 
-            throw new InvalidStatementException("No existe un cliente con la cédula " + cedula + " en el sistema");
+            throw new ApiRequestException("No existe un cliente con la cédula " + cedula + " en el sistema");
     }
 
 
@@ -65,14 +66,14 @@ public class ClienteService {
             return this.clienteRepository.save(cliente);
         }
         else {
-            throw new InvalidStatementException("No existe un cliente con la cédula " + cliente.getCedula() + " en el sistema");
+            throw new ApiRequestException("No existe un cliente con la cédula " + cliente.getCedula() + " en el sistema");
         }
     }
 
 
     public ResponseEntity eliminar(Integer cedula) {
         if (!verificarClienteExiste(cedula)){
-            throw new InvalidStatementException("No existe un cliente la cédula " + cedula + " en el sistema");
+            throw new ApiRequestException("No existe un cliente la cédula " + cedula + " en el sistema");
         }
         else{
             this.clienteRepository.deleteById(cedula);

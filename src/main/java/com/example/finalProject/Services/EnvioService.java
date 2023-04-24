@@ -13,8 +13,9 @@ import com.example.finalProject.Repositories.EmpleadoRepository;
 import com.example.finalProject.Repositories.EnvioRepository;
 import com.example.finalProject.Repositories.PaqueteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -22,10 +23,10 @@ import java.util.Optional;
 @Service
 public class EnvioService {
 
-    private EnvioRepository envioRepository;
-    private EmpleadoRepository empleadoRepository;
-    private ClienteRepository clienteRepository;
-    private PaqueteRepository paqueteRepository;
+    final private EnvioRepository envioRepository;
+    final private EmpleadoRepository empleadoRepository;
+    final private ClienteRepository clienteRepository;
+    final private PaqueteRepository paqueteRepository;
 
 
 
@@ -73,7 +74,7 @@ public class EnvioService {
         }
     }
 
-    public List<Envio> obtenerEnvioPorCedula(Integer cedula ) {
+    public List<Envio> obtenerEnviosPorCedula(Integer cedula ) {
         if(this.clienteRepository.findById(cedula).isEmpty()){
             throw new InvalidStatementException("No existe un cliente con cedula " + cedula + " en nuestra compañía");
         }
@@ -91,7 +92,7 @@ public class EnvioService {
     public List<Envio> obtenerEnviosPorEstado(String estado, Integer cedulaEmpleado) {
         Optional<Empleado> empleado = this.empleadoRepository.findById(cedulaEmpleado);
         if(empleado.isPresent()){
-            List<Envio> envios = this.envioRepository.findAllByEstadoEnvio(estado);
+            List<Envio> envios = this.envioRepository.findAllByEstadoEnvio(EstadoEnvio.valueOf(estado));
             if (envios.isEmpty()) {
                 throw new InvalidStatementException("No existen envíos en estado " + estado + " en el sistema");
             }
@@ -104,6 +105,16 @@ public class EnvioService {
         }
     }
 
+    public ResponseEntity eliminar(String idGuia) {
+        Optional<Envio> envio = this.envioRepository.findById(idGuia);
+        if(envio.isPresent()){
+            this.envioRepository.deleteById(idGuia);
+            return new ResponseEntity("El envio con número de guía " + idGuia + " se ha eliminado con éxito", HttpStatus.ACCEPTED);
+        }
+        else{
+            return new ResponseEntity("No existe una guía con esta identificación en el sistema", HttpStatus.BAD_REQUEST);
+        }
+    }
     public EstadoEnvioDTO actualizarEstado(String idGuia, String estado, Integer cedulaEmpleado) {
         Optional<Empleado> empleado = this.empleadoRepository.findById(cedulaEmpleado);
         if(empleado.isPresent()){
@@ -111,13 +122,12 @@ public class EnvioService {
             if(tipo == TipoEmpleado.CONDUCTOR){
                 throw new InvalidStatementException("El empleado con cedula " + cedulaEmpleado + " no tiene permisos para actualizar el estado de un envío");
             }
-
             else{
                 Optional<Envio> envio = this.envioRepository.findById(idGuia);
                 if (envio.isPresent()) {
                     if(estado.toUpperCase()== "RECIBIDO" ||
-                            (envio.get().getEstadoEnvio() == EstadoEnvio.RECIBIDO && estado.toUpperCase() == "ENTREGADO")
-                            || (envio.get().getEstadoEnvio() == EstadoEnvio.ENRUTA && estado.toUpperCase() == "EN RUTA")){
+                            (envio.get().getEstadoEnvio() == EstadoEnvio.RECIBIDO && estado.equalsIgnoreCase("ENTREGADO"))
+                            || (envio.get().getEstadoEnvio() == EstadoEnvio.ENRUTA && estado.equalsIgnoreCase("EN RUTA"))){
                         throw new InvalidStatementException("El cambio de estado no cumple con las validaciones");
                     }
                     else{
@@ -125,7 +135,7 @@ public class EnvioService {
                             throw new InvalidStatementException("El envío con número de guía " + idGuia + " ya fue entregado");
                         }
                         else{
-                            if(envio.get().getEstadoEnvio()==EstadoEnvio.ENRUTA && estado.toUpperCase() == "ENTREGADO"){
+                            if(envio.get().getEstadoEnvio()==EstadoEnvio.ENRUTA && estado.equalsIgnoreCase("ENTREGADO")){
                                     envio.get().setEstadoEnvio(EstadoEnvio.ENTREGADO);
                                     this.envioRepository.save(envio.get());
                                     return new EstadoEnvioDTO(envio.get().getIdGuia(),envio.get().getEstadoEnvio());
@@ -139,6 +149,7 @@ public class EnvioService {
                     }
                 }
                 else {
+
                     throw new InvalidStatementException("No existe un envío con número de guía " + idGuia + " en el sistema");
                 }
             }

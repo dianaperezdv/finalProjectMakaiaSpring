@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class EmpleadoService {
@@ -30,54 +30,58 @@ public class EmpleadoService {
         Optional<Empleado> empleado1 = this.empleadoRepository.findById(cedula);
         return empleado1.isPresent();
     }
-    public ResponseEntity crearEmpleado(Empleado empleado) {
+    public Empleado crearEmpleado(Empleado empleado) {
         if (verificarEmpleadoExiste(empleado.getCedula())){
-            return new ResponseEntity("Ya existe un empleado con esta cédula", HttpStatus.BAD_REQUEST);
+            throw new InvalidStatementException("Ya existe un empleado con la cédula "  + empleado.getCedula() + " en el sistema");
         }
         else{
-            if((empleado.getCedula().toString()).length() != 10){
-            this.empleadoRepository.save(empleado);
-            return new ResponseEntity(empleado,HttpStatus.ACCEPTED);
-        }
+            if((empleado.getCedula().toString()).length() == 10){
+                if(validateEmail(empleado.getCorreoElectronico())){
+                    return this.empleadoRepository.save(empleado);
+                }
+                else{
+                    throw new InvalidStatementException("El correo electrónico no es válido");
+                }
+            }
             else{
-            return new ResponseEntity("La cédula debe tener 10 dígitos", HttpStatus.BAD_REQUEST);
+                throw new InvalidStatementException("La cédula debe tener 10 dígitos");
+            }
         }
     }
-    }
-    public ResponseEntity obtenerEmpleadoCedula(Integer cedula) {
-        try{
-            return new ResponseEntity(this.empleadoRepository.findById(cedula), HttpStatus.ACCEPTED);
+    public Empleado obtenerEmpleadoCedula(Integer cedula) {
+        if (verificarEmpleadoExiste(cedula)){
+            return (this.empleadoRepository.findById(cedula)).get();
         }
-        catch (Exception e){
-            return new ResponseEntity("No existe un empleado con esta cédula", HttpStatus.BAD_REQUEST);
+        else{
+            throw new InvalidStatementException("No existe un empleado con la cédula número " + cedula);
         }
     }
 
-    public ResponseEntity actualizarEmpleado (Empleado empleado) {
+    public Empleado actualizarEmpleado (Empleado empleado) {
         if(verificarEmpleadoExiste(empleado.getCedula())){
-            try{
-                this.empleadoRepository.save(empleado);
-                return new ResponseEntity(obtenerEmpleadoCedula(empleado.getCedula()), HttpStatus.ACCEPTED);
-            }
-            catch (Exception e){
-                return new ResponseEntity("No se ha podido actualizar el empleado", HttpStatus.BAD_REQUEST);
-            }
+            return this.empleadoRepository.save(empleado);
         }
         else {
-            return new ResponseEntity("No existe un empleado con esta cedula", HttpStatus.BAD_REQUEST);
+            throw new InvalidStatementException("No existe un empleado con la cédula "  + empleado.getCedula() + " en el sistema");
         }
     }
 
     public ResponseEntity eliminar(Integer cedula) {
-        try{
+        if (!verificarEmpleadoExiste(cedula)){
+            throw new InvalidStatementException("No existe un empleado con la cédula "  + cedula + " en el sistema" );
+        }
+        else{
             this.empleadoRepository.deleteById(cedula);
             return new ResponseEntity("El empleado " + cedula+ " se ha eliminado con éxito", HttpStatus.ACCEPTED);
-
         }
-        catch (Exception e){
-            return new ResponseEntity("No se ha podido eliminar el empleado", HttpStatus.BAD_REQUEST);
-        }
+    }
 
+    public boolean validateEmail(String email) {
+        Pattern pattern = Pattern
+                .compile("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@"
+                        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+        Matcher matcher = pattern.matcher(email);
+        return matcher.find();
     }
 
 }

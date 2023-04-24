@@ -4,6 +4,7 @@ import com.example.finalProject.Exception.InvalidStatementException;
 import com.example.finalProject.Modules.Enums.TipoPaquete;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,7 +19,7 @@ public class Paquete implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Column (name = "idPaquete")
-    private Integer idPaquete;
+    private String idPaquete;
     @Column (name = "tipoDePaquete")
     @Enumerated(value = EnumType.STRING)
     private TipoPaquete tipoDePaquete;
@@ -29,7 +30,7 @@ public class Paquete implements Serializable {
 
     public Paquete(float peso, double valorDeclarado){
         Random random = new Random();
-        this.idPaquete = random.nextInt();
+        this.idPaquete = RandomStringUtils.randomAlphanumeric(10);
         try {
             this.tipoDePaquete = calcularTipo(peso);
         } catch (Exception e) {
@@ -49,7 +50,7 @@ public class Paquete implements Serializable {
             throw new InvalidStatementException("El peso no es válido, ingrese un número mayor a 0");}
         else{
             try {
-                if(peso<2.0){
+                if(peso<=2.0){
                     return TipoPaquete.LIVIANO;
                 }
                 else if (peso>2.0 & peso<5.0){

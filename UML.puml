@@ -1,0 +1,182 @@
+@startuml
+class com.example.finalProject.DTO.EnvioNuevoDTO {
+- Integer cedula
+- String ciudadOrigen
+- String ciudadDestino
+- String direccionDestino
+- String nombreRecibe
+- String celularRecibe
+- double valorDeclarado
+- float peso
+}
+class com.example.finalProject.Controllers.EnvioController {
+- EnvioService envioService
++ EnvioCreadoDTO crearEnvio(EnvioNuevoDTO)
++ List<Envio> obtenerEnvios()
++ Envio obtenerEnvioPorId(String)
++ List<Envio> obtenerEnviosPorCliente(Integer)
++ List<Envio> obtenerEnviosPorEstado(String,Integer)
++ ResponseEntity eliminar(String)
++ EstadoEnvioDTO actualizarEnvio(String,CambioEnvioDTO)
+}
+class com.example.finalProject.DTO.CambioEnvioDTO {
+- String estadoEnvio
+- Integer cedulaEmpleado
+}
+class com.example.finalProject.Modules.Cliente {
+- {static} long serialVersionUID
+- String contrasena
+}
+class com.example.finalProject.Services.ClienteService {
+- ClienteRepository clienteRepository
++ boolean verificarClienteExiste(Integer)
++ Cliente crearCliente(Cliente)
++ List<Cliente> obtenerClientes()
++ Cliente obtenerClienteCedula(Integer)
++ Cliente actualizarCliente(Cliente)
++ ResponseEntity eliminar(Integer)
++ boolean validateEmail(String)
+}
+enum com.example.finalProject.Modules.Enums.TipoPaquete {
++  LIVIANO
++  MEDIANO
++  GRANDE
+}
+enum com.example.finalProject.Modules.Enums.TipoEmpleado {
++  CONDUCTOR
++  REPARTIDOR
++  COORDINADOR
+}
+class com.example.finalProject.Configurer.SwaggerConfig {
+~ Docket api()
+}
+enum com.example.finalProject.Modules.Enums.EstadoEnvio {
++  RECIBIDO
++  ENRUTA
++  ENTREGADO
+}
+class com.example.finalProject.Security.WebSecurityConfig {
++ SecurityFilterChain securityFilterChain(HttpSecurity)
++ UserDetailsService userDetailsService()
++ PasswordEncoder passwordEncoder()
+}
+class com.example.finalProject.Controllers.EmpleadoController {
+- EmpleadoService empleadoService
++ Empleado crearEmpleado(Empleado)
++ List<Empleado> obtenerEmpleados()
++ Empleado obtenerEmpleadoPorCedula(Integer)
++ ResponseEntity eliminarEmpleado(Integer)
++ Empleado actualizarEmpleado(Empleado)
+}
+class com.example.finalProject.DTO.EnvioCreadoDTO {
+- String idGuia
+- EstadoEnvio estadoEnvio
+}
+interface com.example.finalProject.Repositories.EnvioRepository {
+~ List<Envio> findAllByClienteCedula(Integer)
+~ List<Envio> findAllByEstadoEnvio(EstadoEnvio)
+}
+class com.example.finalProject.Services.EmpleadoService {
+- EmpleadoRepository empleadoRepository
++ List<Empleado> obtenerEmpleados()
++ boolean verificarEmpleadoExiste(Integer)
++ Empleado crearEmpleado(Empleado)
++ Empleado obtenerEmpleadoCedula(Integer)
++ Empleado actualizarEmpleado(Empleado)
++ ResponseEntity eliminar(Integer)
++ boolean validateEmail(String)
+}
+class com.example.finalProject.Modules.Envio {
+- {static} long serialVersionUID
+- String idGuia
+- Cliente cliente
+- String ciudadOrigen
+- String ciudadDestino
+- String direccionDestino
+- String nombreRecibe
+- String celularRecibe
+- LocalTime horaEntrega
+- EstadoEnvio estadoEnvio
+- double valorEnvio
+- Paquete paquete
+}
+class com.example.finalProject.Modules.Paquete {
+- {static} long serialVersionUID
+- Integer idPaquete
+- TipoPaquete tipoDePaquete
+- float peso
+- double valorDeclarado
++ TipoPaquete getTipoDePaquete()
++ TipoPaquete calcularTipo(float)
+}
+class com.example.finalProject.Exception.ApiExceptionHandler {
++ ResponseEntity<String> clienteRequestException(ApiRequestException)
+}
+class com.example.finalProject.Modules.Empleado {
+- {static} long serialVersionUID
+- String tipoDeSangreRH
+- Integer antiguedadEmpleado
+- TipoEmpleado tipoDeEmpleado
+- String contrasena
+}
+class com.example.finalProject.DTO.EstadoEnvioDTO {
+- String idGuia
+- EstadoEnvio ultimoEstado
+}
+class com.example.finalProject.FinalProjectApplication {
++ {static} void main(String[])
+}
+interface com.example.finalProject.Repositories.EmpleadoRepository {
+}
+interface com.example.finalProject.Repositories.PaqueteRepository {
+}
+class com.example.finalProject.Controllers.ClienteController {
+- ClienteService clienteService
++ Cliente crearCliente(Cliente)
++ List<Cliente> obtenerClientes()
++ Cliente getClientePorCedula(Integer)
++ ResponseEntity eliminar(Integer)
++ Cliente actualizarCliente(Cliente)
+}
+class com.example.finalProject.Services.EnvioService {
+- EnvioRepository envioRepository
+- EmpleadoRepository empleadoRepository
+- ClienteRepository clienteRepository
+- PaqueteRepository paqueteRepository
++ List<Envio> obtenerEnvios()
++ EnvioCreadoDTO crearEnvio(EnvioNuevoDTO)
++ Envio obtenerEnvio(String)
++ List<Envio> obtenerEnviosPorCedula(Integer)
++ List<Envio> obtenerEnviosPorEstado(String,Integer)
++ ResponseEntity eliminar(String)
++ EstadoEnvioDTO actualizarEstado(String,String,Integer)
++ double calcularValor(TipoPaquete)
+}
+interface com.example.finalProject.Repositories.ClienteRepository {
+}
+class com.example.finalProject.Exception.ApiRequestException {
+}
+class com.example.finalProject.Modules.Usuario {
+- Integer cedula
+- String nombre
+- String apellido
+- String correoElectronico
+- String celular
+- String direccionResidencia
+- String ciudadResidencia
+}
+
+
+java.io.Serializable <|.. com.example.finalProject.Modules.Cliente
+com.example.finalProject.Modules.Usuario <|-- com.example.finalProject.Modules.Cliente
+org.springframework.data.jpa.repository.JpaRepository <|-- com.example.finalProject.Repositories.EnvioRepository
+java.io.Serializable <|.. com.example.finalProject.Modules.Envio
+java.io.Serializable <|.. com.example.finalProject.Modules.Paquete
+org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler <|-- com.example.finalProject.Exception.ApiExceptionHandler
+java.io.Serializable <|.. com.example.finalProject.Modules.Empleado
+com.example.finalProject.Modules.Usuario <|-- com.example.finalProject.Modules.Empleado
+org.springframework.data.jpa.repository.JpaRepository <|-- com.example.finalProject.Repositories.EmpleadoRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- com.example.finalProject.Repositories.PaqueteRepository
+org.springframework.data.jpa.repository.JpaRepository <|-- com.example.finalProject.Repositories.ClienteRepository
+com.example.finalProject.Exception.RuntimeException <|-- com.example.finalProject.Exception.ApiRequestException
+@enduml

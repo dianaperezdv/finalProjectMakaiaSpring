@@ -81,15 +81,15 @@ public class EnvioController {
     }
 
     @PreAuthorize("hasRole('READ')")
-    @GetMapping("/envios/{cedula}")
-    @ApiOperation(value = "Obtener lista de envíos por cédula del empleado y estado del envío", response = List.class)
+    @GetMapping("/envios")
+    @ApiOperation(value = "Obtener lista de envíos por por estado del envío", response = List.class)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Lista de envíos obtenida exitosamente", response = List.class),
             @ApiResponse(code = 401, message = "No autorizado", response = List.class),
             @ApiResponse(code = 403, message = "Prohibido", response = List.class),
             @ApiResponse(code = 500, message = "Error interno del servidor", response = List.class)
     })
-    public List<Envio> obtenerEnviosPorEstado(@RequestParam String estado, @PathVariable Integer cedula){
+    public List<Envio> obtenerEnviosPorEstado(@RequestParam String estado, @RequestParam Integer cedula ){
         return envioService.obtenerEnviosPorEstado(estado,cedula);
     }
 

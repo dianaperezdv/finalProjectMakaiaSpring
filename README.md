@@ -52,7 +52,15 @@ Este es el diagrama del modelo entidad-relación para la base de datos MySQL del
 ![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/4781385d15d368650a77be796ec167559e58cdcb/DB_DIAGRAM.png)
 
 -
-## Diagrama del proyecto por paquetes
+## Diagramas del proyecto por paquetes
+
+![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/02262e149c562949f5005a0f38a9f900b02a5bc1/Diagramas/Models.PNG)
+![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/02262e149c562949f5005a0f38a9f900b02a5bc1/Diagramas/controladores.PNG)
+![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/02262e149c562949f5005a0f38a9f900b02a5bc1/Diagramas/servicios.PNG)
+![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/02262e149c562949f5005a0f38a9f900b02a5bc1/Diagramas/dto.PNG)
+![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/29cda521613c3ee2d6d5932247ee98091fb5b11b/Diagramas/ConfigUML.png)
+
+
 
 ```java
 com.example.finalProject

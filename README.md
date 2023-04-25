@@ -85,7 +85,7 @@ com.example.finalProject
 ├── Repositories
 │   ├── ClienteRepository.java
 │   ├── EmpleadoRepository.java
-│   ├── ReservaRepository.java
+│   ├── EnvioRepository.java
 │   └── PaqueteRepository.java
 ├── Segurity
 │   └── WebSecurityConfig.java
@@ -96,12 +96,12 @@ com.example.finalProject
 └── FinalProjectApplication.java
 ```
 
-El proyecto está organizado en cuatro paquetes principales, cada uno correspondiente a un microservicio:
+El proyecto está organizado en cuatro paquetes principales, cada uno correspondiente a un nivel de abstracción diferente:
 
 - El paquete **Configurer** contiene las clases de configuración para la base de datos y Swagger.
 
 
-- El paquete **Controllers** contiene las clases controladoras para los microservicios de Cliente, Habitación y Envio.
+- El paquete **Controllers** contiene las clases controladoras para los servicios de Cliente, Habitación y Envio.
   - Los controladores contienen los endpoint para recibir peticiones HTTP, a través de estas el usuario realiza cambios en la base de datos.
 
 
@@ -122,7 +122,7 @@ El proyecto está organizado en cuatro paquetes principales, cada uno correspond
   - La clase WebSecurityConfig extiende la clase WebSecurityConfigurerAdapter, que proporciona métodos de configuración por defecto para la seguridad HTTP. Sobreescribimos algunos de estos métodos para personalizar la configuración de seguridad. Autorizamos los endpoints para que los usuarios puedan acceder a ellos según su rol.
 
 
-- El paquete **Services** contiene las clases de servicios para los microservicios de Cliente, Empleado y Envio, que contienen la lógica de negocio. Estos servicios son implementados por los endpoints de los controladores. 
+- El paquete **Services** contiene las clases de servicios para los servicios de Cliente, Empleado y Envio, que contienen la lógica de negocio. Estos servicios son implementados por los endpoints de los controladores. 
 
 
 - La clase FinalProjectApplication es la clase principal del proyecto que se utiliza para iniciar la aplicación.

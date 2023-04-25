@@ -228,7 +228,7 @@ Respuesta esperada:
         }
 ```
 
-#### Envio Microservicio
+#### Envio Controller
 | Método Http | EndPoint                                                                         | Descripción                                     |
 |-------------|----------------------------------------------------------------------------------|-------------------------------------------------|
 | `POST`      | ``(http://localhost:8080/apiMensajeria/v1/envios)``                              | Crea un nuevo envio                             |

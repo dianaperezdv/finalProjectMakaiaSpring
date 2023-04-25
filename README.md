@@ -49,7 +49,7 @@ En este caso se utilizan para facilitar el manejo de las respuestas
 
 ## Diagrama del Modelo Entidad-Relación <img align="center" alt="MySQL" height="40" width="40" src="https://d1.awsstatic.com/asset-repository/products/amazon-rds/1024px-MySQL.ff87215b43fd7292af172e2a5d9b844217262571.png">
 Este es el diagrama del modelo entidad-relación para la base de datos MySQL del proyecto de sistema de reservas:
-![diagrama](subir imagen)
+![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/4781385d15d368650a77be796ec167559e58cdcb/DB_DIAGRAM.png)
 
 -
 ## Diagrama del proyecto por paquetes

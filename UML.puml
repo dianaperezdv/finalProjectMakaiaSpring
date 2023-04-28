@@ -27,6 +27,10 @@ class com.example.finalProject.Modules.Cliente {
 - {static} long serialVersionUID
 - String contrasena
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> c9421df (Final v1)
 class com.example.finalProject.Services.ClienteService {
 - ClienteRepository clienteRepository
 + boolean verificarClienteExiste(Integer)
@@ -123,9 +127,12 @@ class com.example.finalProject.DTO.EstadoEnvioDTO {
 - String idGuia
 - EstadoEnvio ultimoEstado
 }
+<<<<<<< HEAD
 class com.example.finalProject.FinalProjectApplication {
 + {static} void main(String[])
 }
+=======
+>>>>>>> c9421df (Final v1)
 interface com.example.finalProject.Repositories.EmpleadoRepository {
 }
 interface com.example.finalProject.Repositories.PaqueteRepository {
@@ -166,6 +173,7 @@ class com.example.finalProject.Modules.Usuario {
 - String ciudadResidencia
 }
 
+<<<<<<< HEAD
 
 java.io.Serializable <|.. com.example.finalProject.Modules.Cliente
 com.example.finalProject.Modules.Usuario <|-- com.example.finalProject.Modules.Cliente
@@ -179,4 +187,6 @@ org.springframework.data.jpa.repository.JpaRepository <|-- com.example.finalProj
 org.springframework.data.jpa.repository.JpaRepository <|-- com.example.finalProject.Repositories.PaqueteRepository
 org.springframework.data.jpa.repository.JpaRepository <|-- com.example.finalProject.Repositories.ClienteRepository
 com.example.finalProject.Exception.RuntimeException <|-- com.example.finalProject.Exception.ApiRequestException
+=======
+>>>>>>> c9421df (Final v1)
 @enduml

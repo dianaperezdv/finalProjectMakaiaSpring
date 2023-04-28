@@ -81,7 +81,7 @@ public class EnvioController {
     }
 
     @PreAuthorize("hasRole('READ')")
-    @GetMapping("/envios")
+    @GetMapping("/envios/estado/")
     @ApiOperation(value = "Obtener lista de envíos por por estado del envío", response = List.class)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Lista de envíos obtenida exitosamente", response = List.class),

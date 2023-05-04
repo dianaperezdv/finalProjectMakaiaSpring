@@ -49,9 +49,8 @@ class ClienteServiceTest {
         cliente1.setCedula(1234);
         when(clienteRepository.findById(1234)).thenReturn(Optional.of(cliente1));
         //Act
-        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
-            clienteService.crearCliente(cliente1);
-        });
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () ->
+            clienteService.crearCliente(cliente1));
         //Assert
         assertEquals("Ya existe un cliente con la cédula 1234 en el sistema",exception.getMessage());
     }
@@ -64,9 +63,8 @@ class ClienteServiceTest {
         cliente1.setCorreoElectronico("correoIncorrecto");
         when(clienteRepository.findById(1234567890)).thenReturn(Optional.empty());
         //Act
-        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
-            clienteService.crearCliente(cliente1);
-        });
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () ->
+            clienteService.crearCliente(cliente1));
         //Assert
         assertEquals("El correo electrónico no es válido", exception.getMessage());
     }
@@ -77,9 +75,8 @@ class ClienteServiceTest {
         cliente1.setCedula(1234);
         when(clienteRepository.findById(1234)).thenReturn(Optional.empty());
         //Act
-        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
-            clienteService.crearCliente(cliente1);
-        });
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () ->
+            clienteService.crearCliente(cliente1));
         //Assert
         assertEquals("La cédula debe tener 10 dígitos", exception.getMessage());
     }
@@ -92,7 +89,7 @@ class ClienteServiceTest {
         cliente1.setCorreoElectronico("diana@gmail.com");
         when(clienteRepository.findById(1234567890)).thenReturn(Optional.empty());
         //Act
-        Cliente resultado = clienteService.crearCliente(cliente1);
+        clienteService.crearCliente(cliente1);
         //Assert
         verify(clienteRepository, times(1)).save(cliente1);
     }
@@ -133,9 +130,8 @@ class ClienteServiceTest {
         Integer cedula = 1234;
         when(clienteRepository.findById(cedula)).thenReturn(Optional.empty());
         //Act
-        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
-            clienteService.obtenerClienteCedula(cedula);
-        });
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () ->
+            clienteService.obtenerClienteCedula(cedula));
         //Assert
         assertEquals("No existe un cliente con la cédula " + cedula + " en el sistema", exception.getMessage());
 
@@ -152,7 +148,7 @@ class ClienteServiceTest {
         clienteActualizado.setCedula(cedula);
         when(this.clienteRepository.findById(cedula)).thenReturn(Optional.of(cliente));
         //Act
-        Cliente resultado = clienteService.actualizarCliente(clienteActualizado);
+        clienteService.actualizarCliente(clienteActualizado);
         //Verify
         verify(this.clienteRepository, times(1)).findById(cedula);
         verify(this.clienteRepository, times(1)).save(clienteActualizado);
@@ -166,9 +162,8 @@ class ClienteServiceTest {
         cliente.setCedula(cedula);
         when(this.clienteRepository.findById(cedula)).thenReturn(Optional.empty());
         //Act
-        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
-            clienteService.actualizarCliente(cliente);
-        });
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () ->
+            clienteService.actualizarCliente(cliente));
         //Assert
         assertEquals("No existe un cliente con la cédula 1234 en el sistema", exception.getMessage());
     }

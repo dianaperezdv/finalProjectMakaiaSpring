@@ -49,9 +49,8 @@ class EmpleadoServiceTest {
         empleado1.setCedula(1234);
         when(empleadoRepository.findById(1234)).thenReturn(Optional.of(empleado1));
         //Act
-        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
-            empleadoService.crearEmpleado(empleado1);
-        });
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () ->
+            empleadoService.crearEmpleado(empleado1));
         //Assert
         assertEquals("Ya existe un empleado con la cédula 1234 en el sistema", exception.getMessage());
 
@@ -65,9 +64,8 @@ class EmpleadoServiceTest {
         empleado1.setCorreoElectronico("correoIncorrecto");
         when(empleadoRepository.findById(1234567890)).thenReturn(Optional.empty());
         //Act
-        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
-            empleadoService.crearEmpleado(empleado1);
-        });
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () ->
+            empleadoService.crearEmpleado(empleado1));
         //Assert
         assertEquals("El correo electrónico no es válido", exception.getMessage());
     }
@@ -78,9 +76,8 @@ class EmpleadoServiceTest {
         empleado1.setCedula(1234);
         when(empleadoRepository.findById(1234)).thenReturn(Optional.empty());
         //Act
-        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
-            empleadoService.crearEmpleado(empleado1);
-        });
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () ->
+            empleadoService.crearEmpleado(empleado1));
         //Assert
         assertEquals("La cédula debe tener 10 dígitos", exception.getMessage());
     }
@@ -93,7 +90,7 @@ class EmpleadoServiceTest {
         empleado1.setCorreoElectronico("empleado@gmail.com");
         when(empleadoRepository.findById(1234567890)).thenReturn(Optional.empty());
         //Act
-        Empleado resultado = empleadoService.crearEmpleado(empleado1);
+        empleadoService.crearEmpleado(empleado1);
         //Verify
         verify(this.empleadoRepository, times(1)).save(empleado1);
     }
@@ -134,11 +131,10 @@ class EmpleadoServiceTest {
         Integer cedula = 1234;
         when(empleadoRepository.findById(cedula)).thenReturn(Optional.empty());
         //Act
-        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
-            empleadoService.obtenerEmpleadoCedula(cedula);
-        });
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () ->
+            empleadoService.obtenerEmpleadoCedula(cedula));
         //Assert
-        assertEquals("No existe un empleado con la cédula 1234", exception.getMessage());
+        assertEquals("No existe un empleado con la cédula número 1234", exception.getMessage());
     }
 
 
@@ -152,7 +148,7 @@ class EmpleadoServiceTest {
         empleadoActualizado.setCedula(cedula);
         when(this.empleadoRepository.findById(cedula)).thenReturn(Optional.of(empleado));
         //Act
-        Empleado resultado = empleadoService.actualizarEmpleado(empleadoActualizado);
+        empleadoService.actualizarEmpleado(empleadoActualizado);
         //Verify
         verify(this.empleadoRepository, times(1)).findById(cedula);
         verify(this.empleadoRepository, times(1)).save(empleadoActualizado);
@@ -166,9 +162,8 @@ class EmpleadoServiceTest {
         empleado.setCedula(cedula);
         when(this.empleadoRepository.findById(cedula)).thenReturn(Optional.empty());
         //Act
-        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
-            empleadoService.actualizarEmpleado(empleado);
-        });
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () ->
+            empleadoService.actualizarEmpleado(empleado));
         //Assert
         assertEquals("No existe un empleado con la cédula 1234 en el sistema", exception.getMessage());
     }

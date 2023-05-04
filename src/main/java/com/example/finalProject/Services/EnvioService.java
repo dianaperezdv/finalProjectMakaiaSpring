@@ -27,10 +27,10 @@ import java.util.Optional;
 @Service
 public class EnvioService {
 
-    final private EnvioRepository envioRepository;
-    final private EmpleadoRepository empleadoRepository;
-    final private ClienteRepository clienteRepository;
-    final private PaqueteRepository paqueteRepository;
+    private final EnvioRepository envioRepository;
+    private final EmpleadoRepository empleadoRepository;
+    private final ClienteRepository clienteRepository;
+    private final PaqueteRepository paqueteRepository;
 
 
 
@@ -62,9 +62,7 @@ public class EnvioService {
                 this.envioRepository.save(envio1);
                 return new EnvioCreadoDTO(envio1.getIdGuia(),envio1.getEstadoEnvio());
             }
-            else {
-                throw new ApiRequestException("El cliente con cedula " + envio.getCedula() + " debe de estar registrado para poder enviar un paquete");
-            }
+            throw new ApiRequestException("El cliente con cédula " + envio.getCedula() + " debe de estar registrado para poder enviar un paquete");
 
     }
 
@@ -73,24 +71,18 @@ public class EnvioService {
         if (envio.isPresent()) {
             return envio.get();
         }
-        else {
-            throw new ApiRequestException("No existe un envío con número de guía " + idGuia + " en el sistema");
-        }
+        throw new ApiRequestException("No existe un envío con número de guía " + idGuia + " en el sistema");
     }
 
     public List<Envio> obtenerEnviosPorCedula(Integer cedula ) {
         if(this.clienteRepository.findById(cedula).isEmpty()){
-            throw new ApiRequestException("No existe un cliente con cedula " + cedula + " en nuestra compañía");
+            throw new ApiRequestException("No existe un cliente con cédula " + cedula + " en nuestra compañía");
         }
-        else{
-            List<Envio> envios = this.envioRepository.findAllByClienteCedula(cedula);
-            if (envios.isEmpty()) {
-                throw new ApiRequestException("El cliente con " + cedula + " no tiene envíos registrados en el sistema");
-            }
-            else {
-                return envios;
-            }
+        List<Envio> envios = this.envioRepository.findAllByClienteCedula(cedula);
+        if (envios.isEmpty()) {
+            throw new ApiRequestException("El cliente con cédula " + cedula + " no tiene envíos registrados en el sistema");
         }
+        return envios;
     }
 
     public List<Envio> obtenerEnviosPorEstado(String estado, Integer cedulaEmpleado) {
@@ -100,14 +92,10 @@ public class EnvioService {
             if (envios.isEmpty()) {
                 throw new ApiRequestException("No existen envíos en estado " + estado + " en el sistema");
             }
-            else {
-                return envios;
-            }
+            return envios;
         }
-        else{
-            throw new ApiRequestException("No existe un empleado con cedula " + cedulaEmpleado + " en nuestra compañía");
+        throw new ApiRequestException("No existe un empleado con cédula " + cedulaEmpleado + " en nuestra compañía");
         }
-    }
 
     public ResponseEntity eliminar(String idGuia) {
         Optional<Envio> envio = this.envioRepository.findById(idGuia);
@@ -115,53 +103,60 @@ public class EnvioService {
             this.envioRepository.deleteById(idGuia);
             return new ResponseEntity("El envio con número de guía " + idGuia + " se ha eliminado con éxito", HttpStatus.ACCEPTED);
         }
-        else{
-            return new ResponseEntity("No existe una guía con esta identificación en el sistema", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity("No existe una guía con esta identificación en el sistema", HttpStatus.BAD_REQUEST);
+    }
+
+
+    public EstadoEnvioDTO actualizarEstado(String idGuia, String estado, Integer cedulaEmpleado) {
+        Envio envio = validacionesPrimariasActualizacion(idGuia,estado,cedulaEmpleado);
+        EstadoEnvio estadoEnum = estadoAEnum(estado);
+            if(envio.getEstadoEnvio()==EstadoEnvio.EN_RUTA && estadoEnum ==(EstadoEnvio.ENTREGADO)){
+                envio.setEstadoEnvio(EstadoEnvio.ENTREGADO);
+                Envio envioActualizado = this.envioRepository.save(envio);
+                return new EstadoEnvioDTO(envioActualizado.getIdGuia(),envioActualizado.getEstadoEnvio());
+            }
+            envio.setEstadoEnvio(EstadoEnvio.EN_RUTA);
+            Envio envioActualizado = this.envioRepository.save(envio);
+            return new EstadoEnvioDTO(envioActualizado.getIdGuia(),envioActualizado.getEstadoEnvio());
+        }
+
+
+    public Envio validacionesPrimariasActualizacion(String idGuia, String estado, Integer cedulaEmpleado){
+        validarConductor(cedulaEmpleado);
+        Envio envio = obtenerEnvio(idGuia);
+        validacionesCambio(estado, envio);
+        validarEntregado(idGuia);
+        return envio;
+    }
+
+    public void validarEntregado(String idGuia) {
+        if(obtenerEnvio(idGuia).getEstadoEnvio() == EstadoEnvio.ENTREGADO){
+            throw new ApiRequestException("El envío con número de guía " + idGuia + " ya fue entregado");
         }
     }
-    public EstadoEnvioDTO actualizarEstado(String idGuia, String estado, Integer cedulaEmpleado) {
+    public void validarConductor(Integer cedulaEmpleado){
         Optional<Empleado> empleado = this.empleadoRepository.findById(cedulaEmpleado);
         if(empleado.isPresent()){
             TipoEmpleado tipo = empleado.get().getTipoDeEmpleado();
             if(tipo == TipoEmpleado.CONDUCTOR){
-                throw new ApiRequestException("El empleado con cedula " + cedulaEmpleado + " no tiene permisos para actualizar el estado de un envío");
-            }
-            else{
-                Optional<Envio> envio = this.envioRepository.findById(idGuia);
-                if (envio.isPresent()) {
-                    if(estado.toUpperCase()== "RECIBIDO" ||
-                            (envio.get().getEstadoEnvio() == EstadoEnvio.RECIBIDO && estado.equalsIgnoreCase("ENTREGADO"))
-                            || (envio.get().getEstadoEnvio() == EstadoEnvio.ENRUTA && estado.equalsIgnoreCase("EN RUTA"))){
-                        throw new ApiRequestException("El cambio de estado no cumple con las validaciones");
-                    }
-                    else{
-                        if(envio.get().getEstadoEnvio() == EstadoEnvio.ENTREGADO){
-                            throw new ApiRequestException("El envío con número de guía " + idGuia + " ya fue entregado");
-                        }
-                        else{
-                            if(envio.get().getEstadoEnvio()==EstadoEnvio.ENRUTA && estado.equalsIgnoreCase("ENTREGADO")){
-                                    envio.get().setEstadoEnvio(EstadoEnvio.ENTREGADO);
-                                    this.envioRepository.save(envio.get());
-                                    return new EstadoEnvioDTO(envio.get().getIdGuia(),envio.get().getEstadoEnvio());
-                            }
-                            else{
-                                envio.get().setEstadoEnvio(EstadoEnvio.ENRUTA);
-                                this.envioRepository.save(envio.get());
-                                return new EstadoEnvioDTO(envio.get().getIdGuia(),envio.get().getEstadoEnvio());
-                            }
-                        }
-                    }
-                }
-                else {
-
-                    throw new ApiRequestException("No existe un envío con número de guía " + idGuia + " en el sistema");
-                }
+                throw new ApiRequestException("El empleado con cédula " + cedulaEmpleado + " no tiene permisos para actualizar el estado de un envío");
             }
         }
-        else{
-            throw new ApiRequestException("El empleado con cedula " + cedulaEmpleado + " no existe en nuestra compañía");
+        throw new ApiRequestException("El empleado con cédula " + cedulaEmpleado + " no existe en nuestra compañía");
+    }
+
+    public void validacionesCambio(String estado, Envio envio){
+        if(estado.equalsIgnoreCase("RECIBIDO") ||
+                (envio.getEstadoEnvio() == EstadoEnvio.RECIBIDO && estado.equalsIgnoreCase("ENTREGADO"))
+                || (envio.getEstadoEnvio() == EstadoEnvio.EN_RUTA && estado.equalsIgnoreCase("EN RUTA"))){
+            throw new ApiRequestException("El cambio de estado no cumple con las validaciones");
         }
     }
+
+    public EstadoEnvio estadoAEnum(String estado){
+        return EstadoEnvio.toEnum(estado);
+    }
+
     public double calcularValor(TipoPaquete tipoPaquete){
             if(tipoPaquete == TipoPaquete.LIVIANO){
                 return 30000;
@@ -169,9 +164,7 @@ public class EnvioService {
             else if (tipoPaquete == TipoPaquete.MEDIANO){
                 return 40000;
             }
-            else{
-                return 50000;
-            }
+            return 50000;
     }
 
 }

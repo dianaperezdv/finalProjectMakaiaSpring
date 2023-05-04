@@ -7,6 +7,7 @@ import com.example.finalProject.Exception.ApiRequestException;
 import com.example.finalProject.Modules.Cliente;
 import com.example.finalProject.Modules.Empleado;
 import com.example.finalProject.Modules.Enums.EstadoEnvio;
+import com.example.finalProject.Modules.Enums.TipoEmpleado;
 import com.example.finalProject.Modules.Enums.TipoPaquete;
 import com.example.finalProject.Modules.Envio;
 import com.example.finalProject.Modules.Paquete;
@@ -105,14 +106,9 @@ class EnvioServiceTest {
         envioDto.setValorDeclarado(50000);
         envioDto.setPeso(2);
 
-        Cliente cliente = new Cliente();
-        cliente.setCedula(123456789);
-        Paquete paquete1 = new Paquete(2,2000);
-        Envio envio1 = new Envio(cliente,"Medellín","Bogotá","Cra 17 #20-10","Laura","342352", LocalTime.now(), EstadoEnvio.RECIBIDO,10000,paquete1);
         // Act
-        ApiRequestException exception =   Assertions.assertThrows(ApiRequestException.class, () -> {
-            this.envioService.crearEnvio(envioDto);
-        });
+        ApiRequestException exception =   Assertions.assertThrows(ApiRequestException.class, () ->
+            this.envioService.crearEnvio(envioDto));
         //Assert
         assertEquals("La solicitud está incompleta, debe llenar todos los datos para poder generar un envío", exception.getMessage());
     }
@@ -131,11 +127,10 @@ class EnvioServiceTest {
         envioDto.setPeso(2);
         when(this.clienteRepository.findById(123456789)).thenReturn(Optional.empty());
         //Act
-        ApiRequestException exception = Assertions.assertThrows(ApiRequestException.class, () -> {
-            this.envioService.crearEnvio(envioDto);
-        });
+        ApiRequestException exception = Assertions.assertThrows(ApiRequestException.class, () ->
+            this.envioService.crearEnvio(envioDto));
         //Assert
-        assertEquals("El cliente con cedula 123456789 debe de estar registrado para poder enviar un paquete", exception.getMessage());
+        assertEquals("El cliente con cédula 123456789 debe de estar registrado para poder enviar un paquete", exception.getMessage());
     }
 
     @Test
@@ -143,9 +138,8 @@ class EnvioServiceTest {
         //Arrange
         when(this.envioRepository.findById("1")).thenReturn(Optional.empty());
         //Act
-        ApiRequestException exception = Assertions.assertThrows(ApiRequestException.class, () -> {
-            this.envioService.obtenerEnvio("1");
-        });
+        ApiRequestException exception = Assertions.assertThrows(ApiRequestException.class, () ->
+            this.envioService.obtenerEnvio("1"));
         //Assert
         assertEquals("No existe un envío con número de guía 1 en el sistema", exception.getMessage());
     }
@@ -171,7 +165,7 @@ class EnvioServiceTest {
         //Act
         ApiRequestException exception = assertThrows(ApiRequestException.class, () -> this.envioService.obtenerEnviosPorCedula(1234567890));
         //Assert
-        assertEquals("No existe un cliente con cedula 1234567890 en nuestra compañía", exception.getMessage());
+        assertEquals("No existe un cliente con cédula 1234567890 en nuestra compañía", exception.getMessage());
     }
 
     @Test
@@ -185,7 +179,7 @@ class EnvioServiceTest {
         //Act
         ApiRequestException exception = assertThrows(ApiRequestException.class, () -> this.envioService.obtenerEnviosPorCedula(cedula));
         //Assert
-        assertEquals("El cliente con 1234567890 no tiene envíos registrados en el sistema", exception.getMessage());
+        assertEquals("El cliente con cédula 1234567890 no tiene envíos registrados en el sistema", exception.getMessage());
 
     }
 
@@ -237,7 +231,7 @@ class EnvioServiceTest {
         //Act
         ApiRequestException exception = assertThrows(ApiRequestException.class, () -> this.envioService.obtenerEnviosPorEstado("ENTREGADO", 1876543219));
         //Assert
-        assertEquals("No existe un empleado con cedula 1876543219 en nuestra compañía", exception.getMessage());
+        assertEquals("No existe un empleado con cédula 1876543219 en nuestra compañía", exception.getMessage());
     }
 
     @Test
@@ -289,7 +283,20 @@ class EnvioServiceTest {
         //Act
         ApiRequestException exception = assertThrows(ApiRequestException.class, () -> this.envioService.actualizarEstado("1", "ENTREGADO", 1876543219));
         //Assert
-        assertEquals("El empleado con cedula 1876543219 no existe en nuestra compañía", exception.getMessage());
+        assertEquals("El empleado con cédula 1876543219 no existe en nuestra compañía", exception.getMessage());
+    }
+
+    @Test
+    void actualizarEstadoEmpleadoConductor() throws ApiRequestException {
+        //Arrange
+        Empleado empleado1 = new Empleado();
+        empleado1.setCedula(1876543219);
+        empleado1.setTipoDeEmpleado(TipoEmpleado.CONDUCTOR);
+        when(this.empleadoRepository.findById(1876543219)).thenReturn(Optional.of(empleado1));
+        //Act
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> this.envioService.actualizarEstado("1", "ENTREGADO", 1876543219));
+        //Assert
+        assertEquals("El empleado con cédula 1876543219 no tiene permisos para actualizar el estado de un envío", exception.getMessage());
     }
 
     @Test
@@ -349,10 +356,12 @@ class EnvioServiceTest {
         cliente1.setCedula(1234567890);
         Paquete paquete1 = new Paquete(2,2000);
         Envio envio1 = new Envio(cliente1,"Medellín","Bogotá","Cra 17 #20-10","Laura","342352", LocalTime.now(), EstadoEnvio.RECIBIDO,10000,paquete1);
+        Envio envioCambio = new Envio(cliente1,"Medellín","Bogotá","Cra 17 #20-10","Laura","342352", LocalTime.now(), EstadoEnvio.EN_RUTA,10000,paquete1);
         when(this.envioRepository.findById("1")).thenReturn(Optional.of(envio1));
+        when(this.envioRepository.save((any()))).thenReturn(envioCambio);
         //Act
         EstadoEnvioDTO envioActualizado = this.envioService.actualizarEstado("1", "En ruta", 1876543219);
-        EstadoEnvioDTO estadoEsperado = new EstadoEnvioDTO("1",EstadoEnvio.ENRUTA);
+        EstadoEnvioDTO estadoEsperado = new EstadoEnvioDTO("1",EstadoEnvio.EN_RUTA);
         //Assert
         assertEquals(estadoEsperado.getUltimoEstado(), envioActualizado.getUltimoEstado());
     }
@@ -365,8 +374,10 @@ class EnvioServiceTest {
         Cliente cliente1 = new Cliente();
         cliente1.setCedula(1234567890);
         Paquete paquete1 = new Paquete(2,2000);
-        Envio envio1 = new Envio(cliente1,"Medellín","Bogotá","Cra 17 #20-10","Laura","342352", LocalTime.now(), EstadoEnvio.ENRUTA,10000,paquete1);
+        Envio envio1 = new Envio(cliente1,"Medellín","Bogotá","Cra 17 #20-10","Laura","342352", LocalTime.now(), EstadoEnvio.EN_RUTA,10000,paquete1);
+        Envio envioCambio = new Envio(cliente1,"Medellín","Bogotá","Cra 17 #20-10","Laura","342352", LocalTime.now(), EstadoEnvio.ENTREGADO,10000,paquete1);
         when(this.envioRepository.findById("1")).thenReturn(Optional.of(envio1));
+        when(this.envioRepository.save((any()))).thenReturn(envioCambio);
         //Act
         EstadoEnvioDTO envioActualizado = this.envioService.actualizarEstado("1", "ENTREGADO", 1876543219);
         EstadoEnvioDTO estadoEsperado = new EstadoEnvioDTO("1",EstadoEnvio.ENTREGADO);

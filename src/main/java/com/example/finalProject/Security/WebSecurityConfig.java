@@ -1,5 +1,6 @@
 package com.example.finalProject.Security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,6 +15,19 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class WebSecurityConfig {
+
+    @Value("${username}")
+    private String usernameAdmin;
+
+    @Value("${password}")
+    private String passwordAdmin;
+
+    @Value("${usernameUser}")
+    private String usernameUser;
+
+    @Value("${passwordUser}")
+    private String passwordUser;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -31,12 +45,12 @@ public class WebSecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(){
         return new InMemoryUserDetailsManager(
-                User.withUsername("user")
-                        .password(passwordEncoder().encode("password"))
+                User.withUsername(usernameUser)
+                        .password(passwordEncoder().encode(passwordUser))
                         .authorities("read")
                         .build(),
-                User.withUsername("admin")
-                        .password(passwordEncoder().encode("admin123"))
+                User.withUsername(usernameAdmin)
+                        .password(passwordEncoder().encode(passwordAdmin))
                         .authorities("read","write")
                         .build()
         );

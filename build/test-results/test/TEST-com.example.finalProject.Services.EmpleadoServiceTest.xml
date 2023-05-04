@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.finalProject.Services.EmpleadoServiceTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2023-05-04T23:23:04" hostname="DIANIS" time="0.105">
+  <properties/>
+  <testcase name="obtenerEmpleados()" classname="com.example.finalProject.Services.EmpleadoServiceTest" time="0.069"/>
+  <testcase name="ActualizarEmpleado()" classname="com.example.finalProject.Services.EmpleadoServiceTest" time="0.003"/>
+  <testcase name="actualizarEmpleadoInexistente()" classname="com.example.finalProject.Services.EmpleadoServiceTest" time="0.002"/>
+  <testcase name="obtenerEmpleadoCedula()" classname="com.example.finalProject.Services.EmpleadoServiceTest" time="0.002"/>
+  <testcase name="crearEmpleadoCorreoIncorrecto()" classname="com.example.finalProject.Services.EmpleadoServiceTest" time="0.002"/>
+  <testcase name="crearEmpleadoCedulaIncorrecta()" classname="com.example.finalProject.Services.EmpleadoServiceTest" time="0.003"/>
+  <testcase name="crearEmpleadoCedulaExistente()" classname="com.example.finalProject.Services.EmpleadoServiceTest" time="0.003"/>
+  <testcase name="obtenerEmpleadoCedulaInexistente()" classname="com.example.finalProject.Services.EmpleadoServiceTest" time="0.002"/>
+  <testcase name="eliminarEmpleado()" classname="com.example.finalProject.Services.EmpleadoServiceTest" time="0.003"/>
+  <testcase name="crearEmpleado()" classname="com.example.finalProject.Services.EmpleadoServiceTest" time="0.003"/>
+  <testcase name="verificarEmpleadoExiste()" classname="com.example.finalProject.Services.EmpleadoServiceTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

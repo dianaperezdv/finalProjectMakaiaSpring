@@ -142,7 +142,9 @@ public class EnvioService {
                 throw new ApiRequestException("El empleado con cédula " + cedulaEmpleado + " no tiene permisos para actualizar el estado de un envío");
             }
         }
-        throw new ApiRequestException("El empleado con cédula " + cedulaEmpleado + " no existe en nuestra compañía");
+        else{
+            throw new ApiRequestException("El empleado con cédula " + cedulaEmpleado + " no existe en nuestra compañía");
+        }
     }
 
     public void validacionesCambio(String estado, Envio envio){

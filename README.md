@@ -54,14 +54,6 @@ Este es el diagrama del modelo entidad-relación para la base de datos MySQL del
 -
 ## Diagramas del proyecto por paquetes
 
-![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/02262e149c562949f5005a0f38a9f900b02a5bc1/Diagramas/Models.PNG)
-![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/02262e149c562949f5005a0f38a9f900b02a5bc1/Diagramas/controladores.PNG)
-![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/02262e149c562949f5005a0f38a9f900b02a5bc1/Diagramas/servicios.PNG)
-![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/02262e149c562949f5005a0f38a9f900b02a5bc1/Diagramas/dto.PNG)
-![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/29cda521613c3ee2d6d5932247ee98091fb5b11b/Diagramas/ConfigUML.png)
-
-
-
 ```java
 com.example.finalProject
 ├── Configurer
@@ -134,6 +126,14 @@ El proyecto está organizado en cuatro paquetes principales, cada uno correspond
 
 
 - La clase FinalProjectApplication es la clase principal del proyecto que se utiliza para iniciar la aplicación.
+
+## Diagramas de los diferentes paquetes con sus métodos
+
+![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/02262e149c562949f5005a0f38a9f900b02a5bc1/Diagramas/Models.PNG)
+![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/02262e149c562949f5005a0f38a9f900b02a5bc1/Diagramas/controladores.PNG)
+![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/02262e149c562949f5005a0f38a9f900b02a5bc1/Diagramas/servicios.PNG)
+![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/02262e149c562949f5005a0f38a9f900b02a5bc1/Diagramas/dto.PNG)
+![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/29cda521613c3ee2d6d5932247ee98091fb5b11b/Diagramas/ConfigUML.png)
 
 
 
@@ -250,6 +250,8 @@ Respuesta esperada:
 
 Endpoints:
 - **POST /envio** - Crea un nuevo envio
+En el siguiente diagrama podemos ver algunas validaciones que se realizan para crear un envío.
+![diagrama](https://github.com/dianaperezdv/finalProjectMakaiaSpring/blob/e6d97ef0c3a1d3f223333b6dcbeada28e76780fb/CreacionEnvio.png)
 
 Ejemplo de petición:
 
@@ -275,7 +277,7 @@ Respuesta esperada:
 ```java
 {
     "idGuia": "W5PRXYa80C",
-    "eltimoEstado":"EN RUTA"
+    "ultimoEstado":"EN RUTA"
 }
 ```
 

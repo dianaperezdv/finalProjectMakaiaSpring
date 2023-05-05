@@ -32,4 +32,4 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-//apply plugin: 'war'
+apply plugin: 'war'

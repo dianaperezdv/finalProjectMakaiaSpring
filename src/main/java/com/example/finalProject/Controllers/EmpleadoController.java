@@ -3,6 +3,7 @@ package com.example.finalProject.Controllers;
 
 import com.example.finalProject.Modules.Empleado;
 import com.example.finalProject.Services.EmpleadoService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("apiMensajeria/v1")
+@Api(value = "Clientes", description = "Controlador de gestión de empleados")
 public class EmpleadoController {
 
     private EmpleadoService empleadoService;

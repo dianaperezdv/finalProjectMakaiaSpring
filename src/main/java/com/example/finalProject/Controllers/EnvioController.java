@@ -7,6 +7,7 @@ import com.example.finalProject.DTO.EstadoEnvioDTO;
 import com.example.finalProject.Modules.Empleado;
 import com.example.finalProject.Modules.Envio;
 import com.example.finalProject.Services.EnvioService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("apiMensajeria/v1")
+@Api(value = "Envíos", description = "Controlador de gestión de envíos")
 public class EnvioController {
     private EnvioService envioService;
 
